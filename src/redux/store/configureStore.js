@@ -16,7 +16,11 @@ const createPersistConfig = (key, fieldsToIgnore = []) => ({
     ),
 });
 
-const persistConfig = createPersistConfig('root', ['register', 'result']);
+const persistConfig = createPersistConfig('root', [
+  'register',
+  'result',
+  'filter',
+]);
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 

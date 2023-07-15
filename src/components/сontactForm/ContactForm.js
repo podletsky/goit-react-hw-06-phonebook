@@ -1,15 +1,26 @@
 import React, { useState } from 'react';
 import { nanoid } from 'nanoid';
 import styles from '../contactList/ContactList.module.css';
-
-const ContactForm = ({ addContact, contacts }) => {
+import { useDispatch, useSelector } from 'react-redux';
+import { selestSelectors } from '../../redux/selectors/selectors.js';
+import { addContact } from 'redux/contactsSlice/conactsSlice';
+const ContactForm = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
+  const contacts = useSelector(selestSelectors);
+  const dispatch = useDispatch();
   const handleNameChange = event => {
     setName(event.target.value);
   };
-
+  const handleAddContact = contact => {
+    try {
+      dispatch(addContact(contact));
+    } catch (error) {
+      const errorMessage = error.toString();
+      console.log(errorMessage);
+    }
+  };
   const handleNumberChange = event => {
     setNumber(event.target.value);
   };
@@ -30,7 +41,7 @@ const ContactForm = ({ addContact, contacts }) => {
     if (isDuplicateName) {
       alert(`Контакт з ім'ям ${name} вже існує!`);
     } else {
-      addContact(newContact);
+      dispatch(addContact(newContact));
       setName('');
       setNumber('');
     }
@@ -56,7 +67,11 @@ const ContactForm = ({ addContact, contacts }) => {
         placeholder="Phone Number"
         required
       />
-      <button className={styles.buttonForm} type="submit">
+      <button
+        className={styles.buttonForm}
+        type="submit"
+        onInput={handleAddContact}
+      >
         Add Contact
       </button>
     </form>
